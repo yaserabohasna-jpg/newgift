@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دكتورتنا رغد</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --rose: #c2556a;
+    --rose-light: #e8829a;
+    --deep: #1a0a2e;
+    --cream: #fdf6ee;
+    --soft: #f5e6d3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--deep);
+    color: var(--cream);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── Stars background ── */
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d, 3s) infinite ease-in-out;
+    opacity: 0;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.8); }
+    50%       { opacity: var(--o, 0.7); transform: scale(1.2); }
+  }
+
+  /* ── Pages ── */
+  .page {
+    display: none;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 40px 24px 120px;
+    text-align: center;
+    animation: fadeIn 0.9s ease;
+  }
+  .page.active { display: flex; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Decorative circle halo ── */
+  .halo {
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(201,168,76,0.35);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 32px;
+    position: relative;
+    animation: rotate 18s linear infinite;
+  }
+  .halo::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border-radius: 50%;
+    border: 1px dashed rgba(201,168,76,0.25);
+  }
+  .halo-inner {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #3d1a5c, #1a0a2e);
+    box-shadow: 0 0 60px rgba(201,168,76,0.2), inset 0 0 30px rgba(201,168,76,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 52px;
+    animation: rotate 18s linear infinite reverse;
+  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+
+  /* ── Page 1 title ── */
+  .title-main {
+    font-family: 'Scheherazade New', serif;
+    font-size: clamp(3rem, 11vw, 6.5rem);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 40%, #e8c060 70%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.15;
+    letter-spacing: 2px;
+    text-shadow: none;
+    filter: drop-shadow(0 0 20px rgba(201,168,76,0.5));
+    animation: shimmer 4s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(201,168,76,0.5)); }
+    50%       { filter: drop-shadow(0 0 40px rgba(240,208,128,0.8)); }
+  }
+
+  .subtitle {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1rem, 4vw, 1.4rem);
+    color: rgba(253,246,238,0.7);
+    margin-top: 18px;
+    font-style: italic;
+    line-height: 1.8;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 28px auto;
+    width: min(340px, 90%);
+  }
+  .divider span { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .divider i { color: var(--gold); font-size: 1.1rem; }
+
+  /* ── Cards / quote boxes ── */
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 20px;
+    padding: 28px 28px;
+    max-width: 480px;
+    width: 100%;
+    margin: 14px auto;
+    backdrop-filter: blur(8px);
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+    line-height: 2;
+    color: var(--soft);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(201,168,76,0.15); }
+
+  .card.highlight {
+    border-color: rgba(194,85,106,0.4);
+    background: rgba(194,85,106,0.07);
+  }
+
+  /* ── Eid page ── */
+  .eid-title {
+    font-family: 'Scheherazade New', serif;
+    font-size: clamp(2.2rem, 9vw, 4.5rem);
+    font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1.3;
+    filter: drop-shadow(0 0 16px rgba(240,208,128,0.5));
+  }
+  .eid-moon { font-size: clamp(3rem, 12vw, 6rem); margin: 16px 0; display: block; animation: moonFloat 3s ease-in-out infinite; }
+  @keyframes moonFloat {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50%       { transform: translateY(-12px) rotate(5deg); }
+  }
+
+  /* ── Floating hearts page ── */
+  .hearts-container { position: relative; width: 100%; max-width: 440px; margin: 0 auto; }
+  .floating-heart {
+    position: absolute;
+    font-size: 1.4rem;
+    animation: floatUp var(--dur, 4s) ease-in infinite;
+    opacity: 0;
+    left: var(--x, 50%);
+  }
+  @keyframes floatUp {
+    0%   { opacity: 0;   transform: translateY(0) scale(0.5); }
+    20%  { opacity: 1; }
+    80%  { opacity: 0.6; }
+    100% { opacity: 0;   transform: translateY(-180px) scale(1.2); }
+  }
+
+  /* ── Poem page ── */
+  .poem-line {
+    font-family: 'Scheherazade New', serif;
+    font-size: clamp(1.15rem, 4.5vw, 1.6rem);
+    color: var(--gold-light);
+    line-height: 2.4;
+    opacity: 0;
+    animation: lineReveal 0.8s forwards;
+  }
+  .poem-line:nth-child(1)  { animation-delay: 0.1s; }
+  .poem-line:nth-child(2)  { animation-delay: 0.4s; }
+  .poem-line:nth-child(3)  { animation-delay: 0.7s; }
+  .poem-line:nth-child(4)  { animation-delay: 1.0s; }
+  .poem-line:nth-child(5)  { animation-delay: 1.3s; }
+  .poem-line:nth-child(6)  { animation-delay: 1.6s; }
+  @keyframes lineReveal {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ── Navigation bar ── */
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(26,10,46,0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(201,168,76,0.25);
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 16px 20px;
+  }
+  .nav-btn {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(0.72rem, 2.8vw, 0.88rem);
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(201,168,76,0.35);
+    background: transparent;
+    color: rgba(253,246,238,0.65);
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .nav-btn.active,
+  .nav-btn:hover {
+    background: linear-gradient(135deg, var(--gold), #a8782a);
+    border-color: var(--gold);
+    color: var(--deep);
+    font-weight: 700;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+  }
+
+  /* ── Page dots ── */
+  .page-label {
+    font-family: 'Amiri', serif;
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(201,168,76,0.5);
+    margin-bottom: 10px;
+  }
+
+  /* ── Ornament ── */
+  .ornament { font-size: 2rem; color: var(--gold); opacity: 0.6; margin: 10px 0; }
+
+  /* responsive */
+  @media (max-width: 380px) {
+    .nav-btn { padding: 8px 10px; font-size: 0.68rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+
+<!-- ═══════════════════════════════════════ PAGE 1 ═══════════════════════════════════════ -->
+<div class="page active" id="page1">
+  <p class="page-label">✦ الصفحة الأولى ✦</p>
+
+  <div class="halo">
+    <div class="halo-inner">🌸</div>
+  </div>
+
+  <h1 class="title-main">دكتورتنا رغد</h1>
+
+  <div class="divider"><span></span><i>✦</i><span></span></div>
+
+  <p class="subtitle">
+    في كل قلب تلمسته بعلمها أثرٌ باقٍ<br>
+    وفي كل روح أضاءتها بإنسانيتها نورٌ لا يُمحى
+  </p>
+
+  <div class="ornament">❧</div>
+
+  <div class="card">
+    بعض الناس يولدون ليكونوا فارقًا حقيقيًا في حياة من حولهم…<br>
+    وأنتِ يا دكتورة رغد من هؤلاء النادرين
+  </div>
+
+  <div class="card highlight">
+    "ليس الطبيب من يعالج الجسد فحسب،<br>بل من يُدخل الطمأنينة إلى القلوب"<br>
+    — وهذا ما تفعلينه في كل يوم 🌺
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ PAGE 2 ═══════════════════════════════════════ -->
+<div class="page" id="page2">
+  <p class="page-label">✦ الصفحة الثانية ✦</p>
+
+  <span class="eid-moon">🌙</span>
+  <h2 class="eid-title">عيد مبارك سعيد<br>يا دكتورة رغد</h2>
+
+  <div class="divider"><span></span><i>★</i><span></span></div>
+
+  <div class="card">
+    كلّ عيدٍ يأتي وأنتِ بخير وسعادة وعافية،<br>
+    وكلّ يومٍ يمرّ يزيدكِ نجاحًا وبهاءً 🌟
+  </div>
+
+  <div class="card highlight">
+    أعاد الله عليكِ هذا العيد<br>
+    وقلبكِ مليءٌ بالفرح،<br>
+    وحياتكِ عامرةٌ بكل ما تتمنّين 🌷
+  </div>
+
+  <div class="card">
+    في أجمل أيام السنة وأبهاها،<br>
+    نُهديكِ أصدق التهاني وأعطرها…<br>
+    فأنتِ تستحقّين كل ما هو جميل ✨
+  </div>
+
+  <p style="font-family:'Scheherazade New',serif;font-size:1.6rem;color:var(--gold-light);margin-top:24px;">
+    تقبّل الله منّا ومنكم 🤍
+  </p>
+</div>
+
+<!-- ═══════════════════════════════════════ PAGE 3 ═══════════════════════════════════════ -->
+<div class="page" id="page3">
+  <p class="page-label">✦ الصفحة الثالثة ✦</p>
+
+  <div style="font-size:2.8rem;margin-bottom:12px;">🌹</div>
+  <h2 style="font-family:'Scheherazade New',serif;font-size:clamp(1.8rem,7vw,3rem);color:var(--gold-light);margin-bottom:6px;">
+    من القلب… إليكِ
+  </h2>
+
+  <div class="divider"><span></span><i>♡</i><span></span></div>
+
+  <div class="hearts-container" id="heartsBox"></div>
+
+  <div class="card" style="margin-top:20px;">
+    يقال إن بعض الناس يمرّون في حياتنا كضيوف،<br>
+    لكنكِ لستِ كذلك…<br>
+    أنتِ لحظةٌ لا تُنسى تسكن الذاكرة إلى الأبد 💫
+  </div>
+
+  <div class="card highlight">
+    في حضوركِ شيءٌ يُسكت الضجيج<br>
+    ويجعل كل شيء يبدو أكثر معنى وأكثر جمالًا…<br>
+    هذه هديّةٌ لا يمتلكها كثيرون 🌸
+  </div>
+
+  <div class="card">
+    كل شخص يعرفكِ محظوظٌ بطريقة ما،<br>
+    لأن الاقتراب منكِ يشعرك أن الدنيا<br>
+    لا تزال بها أشياء جميلة تستحق الابتسامة 🌺
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ PAGE 4 ═══════════════════════════════════════ -->
+<div class="page" id="page4">
+  <p class="page-label">✦ الصفحة الرابعة ✦</p>
+
+  <div style="font-size:2.4rem;margin-bottom:16px;">🕊️</div>
+  <h2 style="font-family:'Scheherazade New',serif;font-size:clamp(1.8rem,7vw,3rem);color:var(--gold-light);margin-bottom:20px;">
+    قصيدة رغد
+  </h2>
+
+  <div class="divider"><span></span><i>✦</i><span></span></div>
+
+  <div id="poemBox" style="max-width:480px;width:100%;margin:0 auto 24px;"></div>
+
+  <div class="card highlight" style="margin-top:8px;">
+    وفي الختام…<br>
+    كل يومٍ جديد هو فرصةٌ لتُضيفي للعالم<br>
+    شيئًا من جمالكِ ودفء قلبكِ الكبير 🌙<br><br>
+    <strong style="color:var(--gold-light);">دُمتِ متألّقةً دائمًا، يا دكتورة رغد 🌟</strong>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ NAVIGATION ═══════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showPage(1)">🌸 دكتورتنا</button>
+  <button class="nav-btn" onclick="showPage(2)">🌙 عيد مبارك</button>
+  <button class="nav-btn" onclick="showPage(3)">💌 من القلب</button>
+  <button class="nav-btn" onclick="showPage(4)">🕊️ قصيدة رغد</button>
+</nav>
+
+<script>
+// ── Stars ──
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `
+    width:${size}px;height:${size}px;
+    top:${Math.random()*100}%;left:${Math.random()*100}%;
+    --d:${(Math.random()*4+2).toFixed(1)}s;
+    --o:${(Math.random()*0.6+0.2).toFixed(2)};
+    animation-delay:${(Math.random()*6).toFixed(1)}s;
+  `;
+  starsEl.appendChild(s);
+}
+
+// ── Navigation ──
+function showPage(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+  document.querySelectorAll('.nav-btn')[n-1].classList.add('active');
+
+  if (n === 3) spawnHearts();
+  if (n === 4) renderPoem();
+}
+
+// ── Floating Hearts ──
+function spawnHearts() {
+  const box = document.getElementById('heartsBox');
+  box.style.height = '120px';
+  box.innerHTML = '';
+  const emojis = ['💖','💗','💓','💝','🌸','✨','💫','🌺','💕'];
+  for (let i = 0; i < 14; i++) {
+    const h = document.createElement('span');
+    h.className = 'floating-heart';
+    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    const delay = (Math.random()*4).toFixed(1);
+    const dur   = (Math.random()*3+3).toFixed(1);
+    h.style.cssText = `--dur:${dur}s;--x:${Math.random()*90}%;left:var(--x);animation-delay:${delay}s;`;
+    box.appendChild(h);
+  }
+}
+
+// ── Poem ──
+function renderPoem() {
+  const lines = [
+    'رغدٌ… اسمٌ كالنسيم العليل',
+    'يحمل في حروفه عبير الجميل',
+    'طبيبةٌ تُداوي بالعلم والحنان',
+    'وبابتسامةٍ تُشفي الأوجان',
+    'في عيونها دفءٌ لا يُقاس',
+    'وفي روحها نورٌ لا يُحاس'
+  ];
+  const box = document.getElementById('poemBox');
+  box.innerHTML = '';
+  lines.forEach((l, i) => {
+    const p = document.createElement('p');
+    p.className = 'poem-line';
+    p.textContent = l;
+    // reset animation
+    p.style.animationDelay = (i * 0.3 + 0.1) + 's';
+    box.appendChild(p);
+  });
+}
+</script>
+</body>
+</html>
